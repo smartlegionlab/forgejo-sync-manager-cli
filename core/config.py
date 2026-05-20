@@ -1,9 +1,11 @@
+# Copyright (©) 2026, Alexander Suvorov. All rights reserved.
+# License: BSD 3-Clause
 import json
 from pathlib import Path
 
 
 class ConfigManager:
-    APP_NAME = "forgejo-sync"
+    APP_NAME = "forgejo-sync-manager"
 
     def __init__(self):
         self.app_dir = None

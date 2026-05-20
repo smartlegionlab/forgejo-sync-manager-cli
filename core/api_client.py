@@ -1,3 +1,5 @@
+# Copyright (©) 2026, Alexander Suvorov. All rights reserved.
+# License: BSD 3-Clause
 import requests
 from core.auth import ForgejoAuth
 

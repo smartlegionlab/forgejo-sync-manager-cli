@@ -1,4 +1,95 @@
-# Forgejo Sync Manager v0.0.1
+# forgejo-sync-manager
+
+CLI tool for batch synchronization of Forgejo repositories to local machine.
+
+---
+
+[![GitHub top language](https://img.shields.io/github/languages/top/smartlegionlab/forgejo-sync-manager)](https://github.com/smartlegionlab/forgejo-sync-manager)
+[![GitHub license](https://img.shields.io/github/license/smartlegionlab/forgejo-sync-manager)](https://github.com/smartlegionlab/forgejo-sync-manager/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/v/release/smartlegionlab/forgejo-sync-manager)](https://github.com/smartlegionlab/forgejo-sync-manager/)
+[![GitHub stars](https://img.shields.io/github/stars/smartlegionlab/forgejo-sync-manager?style=social)](https://github.com/smartlegionlab/forgejo-sync-manager/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/smartlegionlab/forgejo-sync-manager?style=social)](https://github.com/smartlegionlab/forgejo-sync-manager/network/members)
+
+---
+
+## ⚠️ Disclaimer
+
+**By using this software, you agree to the full disclaimer terms.**
+
+**Summary:** Software provided "AS IS" without warranty. You assume all risks.
+
+**Full legal disclaimer:** See [DISCLAIMER.md](https://github.com/smartlegionlab/forgejo-sync-manager/blob/master/DISCLAIMER.md)
+
+---
+
+## Features
+
+- Automatic authentication via personal access token
+- Repository cloning and updating with progress tracking
+- Update detection via commit hash comparison
+- Full repository recloning option
+- Parallel progress display for large repository sets
+- Persistent configuration storage
+
+## Requirements
+
+- Python 3.8+
+- Git
+- Forgejo server with API access
+
+## Installation
+
+```bash
+git clone https://github.com/smartlegionlab/forgejo-sync-manager.git
+cd forgejo-sync-manager
+python app.py
+```
+
+## Configuration
+
+On first run, the tool will guide you through:
+
+1. Server URL (e.g., `http://localhost:3000`)
+2. Personal access token with `read:repository` and `read:user` scopes
+
+Configuration is stored in `~/forgejo-sync-manager/config.json`
+
+## Usage
+
+```bash
+python app.py
+```
+
+### Main Menu
+
+- `1` - Display user information
+- `2` - Repository operations
+- `3` - Settings (full reset)
+- `0` - Exit
+
+### Repository Menu
+
+- `1` - Show statistics (total, public, private, forks)
+- `2` - List all repositories with names, types, and sizes
+- `3` - Check for updates (compares local and remote commit hashes)
+- `4` - Sync all repositories (clone missing, pull existing)
+- `5` - Reclone all repositories (delete and fresh clone)
+- `0` - Back to main menu
+
+## How It Works
+
+1. **Authentication**: Token-based authentication via Forgejo API
+2. **Repository Discovery**: Fetches complete repository list with pagination (50 per page)
+3. **Update Detection**: For each existing repository, executes `git fetch` and compares `HEAD` with `FETCH_HEAD`
+4. **Sync Operations**: Uses authenticated URLs with embedded token for Git operations
+5. **Directory Structure**: `~/forgejo-sync-manager/{username}/repositories/`
+
+## License
+
+[BSD 3-Clause License](LICENSE)
+
+Copyright (©) 2026, [Alexander Suvorov](https://github.com/smartlegionlab)
+All rights reserved.
 
 ---
 

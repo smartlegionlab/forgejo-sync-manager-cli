@@ -1,3 +1,5 @@
+# Copyright (©) 2026, Alexander Suvorov. All rights reserved.
+# License: BSD 3-Clause
 from core.config import ConfigManager
 from core.auth import ForgejoAuth
 
@@ -52,7 +54,8 @@ class ConsoleUI:
     def save_auth(self, auth: ForgejoAuth):
         config = {
             "token": auth.token,
-            "server_url": auth.server_url
+            "server_url": auth.server_url,
+            "username": auth.username
         }
         self.config_manager.save(config)
 
@@ -90,7 +93,12 @@ class ConsoleUI:
         print(f"  Full name:   {user_data.get('full_name', 'N/A')}")
         print(f"  Email:       {user_data.get('email', 'N/A')}")
         print(f"  User ID:     {user_data.get('id', 'N/A')}")
-        print(f"  Created:     {user_data.get('created_at', 'N/A')}")
+
+        created = user_data.get('created', 'N/A')
+        if created != 'N/A':
+            created = created.replace('T', ' ').replace('Z', '').split('.')[0]
+        print(f"  Created:     {created}")
+
         print(f"  Admin:       {user_data.get('is_admin', False)}")
         print("─" * 50)
 
@@ -118,14 +126,29 @@ class ConsoleUI:
         print(f"{'Repository Name':<50} {'Type':<10} {'Size (MB)':<15}")
         print("─" * 100)
 
+        total_size = 0
+        private_count = 0
+        public_count = 0
+
         for repo in repos:
             name = repo.get('name', 'N/A')
             private = repo.get('private', False)
             repo_type = "Private" if private else "Public"
             size = repo.get('size', 0) / 1024
 
+            if private:
+                private_count += 1
+            else:
+                public_count += 1
+
+            total_size += size
+
             print(f"{name:<50} {repo_type:<10} {size:.2f}")
 
+        print("─" * 100)
+        print(f"{'TOTAL':<50} {public_count + private_count:<10} {total_size:.2f}")
+        print(f"{'Public':<50} {public_count:<10}")
+        print(f"{'Private':<50} {private_count:<10}")
         print("─" * 100)
         input("\nPress Enter to continue...")
 
@@ -135,14 +158,30 @@ class ConsoleUI:
         print("=" * 50)
         print("  1. Show Statistics")
         print("  2. Show All Repositories")
-        print("  3. Sync All Repositories")
-        print("  4. Reclone All Repositories")
+        print("  3. Check for Updates")
+        print("  4. Sync All Repositories")
+        print("  5. Reclone All Repositories")
         print("  0. Back to Main Menu")
         print("=" * 50)
 
+    def show_updates_result(self, updates_count: int):
+        print("\n" + "─" * 50)
+        if updates_count == 0:
+            print("No updates available. All repositories are up to date.")
+        else:
+            print(f"Found {updates_count} repositories with updates available.")
+        print("─" * 50)
+
+    def prompt_update_choice(self, updates_count: int) -> str:
+        if updates_count == 0:
+            return "0"
+        print("\n  1. Update all")
+        print("  0. Cancel")
+        return input("\nSelect option: ").strip()
+
     def show_sync_results(self, results: dict):
         print("\n" + "─" * 50)
-        print("SYNC COMPLETED")
+        print("UPDATE COMPLETED")
         print("─" * 50)
         print(f"  Cloned:  {results['cloned']}")
         print(f"  Updated: {results['updated']}")

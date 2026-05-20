@@ -1,3 +1,5 @@
+# Copyright (©) 2026, Alexander Suvorov. All rights reserved.
+# License: BSD 3-Clause
 import sys
 import os
 from ui.console import ConsoleUI
@@ -41,7 +43,8 @@ def main():
         ui.show_success("Configuration file found")
         auth = ForgejoAuth(
             token=existing_config.get("token", ""),
-            server_url=existing_config.get("server_url", "")
+            server_url=existing_config.get("server_url", ""),
+            username=existing_config.get("username", "")
         )
     else:
         ui.show_info("No configuration found")
@@ -80,7 +83,9 @@ def main():
                 auth.token = token
 
                 try:
-                    test_auth_connection(auth)
+                    client = ForgejoAPIClient(auth)
+                    user_info = client.get_user_info()
+                    auth.username = user_info.get('login', '')
                     ui.show_success("Authentication successful")
                     break
                 except requests.exceptions.HTTPError as e:
@@ -99,8 +104,6 @@ def main():
                     continue
 
             try:
-                client = ForgejoAPIClient(auth)
-                user_info = client.get_user_info()
                 repos = client.get_user_repos()
 
                 ui.save_auth(auth)
@@ -138,6 +141,8 @@ def main():
                 ui.show_error(f"Connection error: {e}")
                 sys.exit(1)
 
+    sync_manager = SyncManager(auth)
+
     while True:
         ui.show_main_menu()
         choice = ui.get_menu_choice()
@@ -155,22 +160,33 @@ def main():
                 elif repo_choice == "2":
                     ui.show_repo_list(repos)
                 elif repo_choice == "3":
+                    needing_update = sync_manager.check_updates(repos)
+                    updates_count = len(needing_update)
+
+                    ui.show_updates_result(updates_count)
+
+                    if updates_count > 0:
+                        update_choice = ui.prompt_update_choice(updates_count)
+                        if update_choice == "1":
+                            results = sync_manager.sync_updates_only(needing_update)
+                            ui.show_sync_results(results)
+
+                    input("\nPress Enter to continue...")
+                elif repo_choice == "4":
                     print("\n" + "─" * 50)
-                    print("SYNCHRONIZING REPOSITORIES")
+                    print("SYNCHRONIZING ALL REPOSITORIES")
                     print("─" * 50)
 
-                    sync_manager = SyncManager(auth)
                     results = sync_manager.sync_all_repositories(repos)
 
                     ui.show_sync_results(results)
 
                     input("\nPress Enter to continue...")
-                elif repo_choice == "4":
+                elif repo_choice == "5":
                     print("\n" + "─" * 50)
                     print("RECLONING REPOSITORIES")
                     print("─" * 50)
 
-                    sync_manager = SyncManager(auth)
                     results = sync_manager.reclone_all_repositories(repos)
 
                     ui.show_reclone_results(results)
