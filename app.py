@@ -85,6 +85,8 @@ def main():
         if choice == "1":
             ui.show_user_info(user_info)
         elif choice == "2":
+            ui.show_repo_statistics(repos)
+
             while True:
                 ui.show_repo_menu()
                 repo_choice = ui.get_menu_choice()

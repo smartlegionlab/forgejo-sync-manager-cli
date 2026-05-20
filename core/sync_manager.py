@@ -21,13 +21,14 @@ class SyncManager:
         authenticated_url = f"{parsed.scheme}://{self.auth.username}:{self.auth.token}@{parsed.netloc}{parsed.path}"
         return authenticated_url
 
-    def sync_repository(self, repo):
+    def sync_repository(self, repo, current_index: int, total: int, failed_count: int):
         repo_name = repo['name']
         clone_url = repo['clone_url']
         authenticated_url = self.get_authenticated_url(clone_url)
         repo_path = self.repos_dir / repo_name
 
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        progress = f"[{current_index}/{total}/{failed_count}]"
 
         if repo_path.exists():
             try:
@@ -37,19 +38,19 @@ class SyncManager:
                                check=True, capture_output=True, text=True)
                 subprocess.run(['git', '-C', str(repo_path), 'pull'],
                                check=True, capture_output=True, text=True)
-                print(f"[{timestamp}] {repo_name} - UPDATED")
+                print(f"{progress} [{timestamp}] {repo_name} - UPDATED")
                 return "UPDATED"
             except subprocess.CalledProcessError as e:
-                print(f"[{timestamp}] {repo_name} - FAILED: {e.stderr}")
+                print(f"{progress} [{timestamp}] {repo_name} - FAILED: {e.stderr}")
                 return "FAILED"
         else:
             try:
                 subprocess.run(['git', 'clone', authenticated_url, str(repo_path)],
                                check=True, capture_output=True, text=True)
-                print(f"[{timestamp}] {repo_name} - CLONED")
+                print(f"{progress} [{timestamp}] {repo_name} - CLONED")
                 return "CLONED"
             except subprocess.CalledProcessError as e:
-                print(f"[{timestamp}] {repo_name} - FAILED: {e.stderr}")
+                print(f"{progress} [{timestamp}] {repo_name} - FAILED: {e.stderr}")
                 return "FAILED"
 
     def sync_all_repositories(self, repos):
@@ -61,8 +62,10 @@ class SyncManager:
             "failed": 0
         }
 
-        for repo in repos:
-            status = self.sync_repository(repo)
+        total = len(repos)
+
+        for idx, repo in enumerate(repos, 1):
+            status = self.sync_repository(repo, idx, total, results["failed"])
             if status == "CLONED":
                 results["cloned"] += 1
             elif status == "UPDATED":
