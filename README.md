@@ -1,3 +1,4 @@
-# forgejo-sync
+# Forgejo Sync Manager v0.0.1
 
-Forgejo Sync Manager
+---
+
