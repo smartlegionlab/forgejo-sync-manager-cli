@@ -1,4 +1,4 @@
-# forgejo-sync-manager
+# forgejo-sync-manager <sup>v0.1.1</sup>
 
 CLI tool for batch synchronization of Forgejo repositories to local machine.
 
@@ -42,6 +42,14 @@ CLI tool for batch synchronization of Forgejo repositories to local machine.
 ```bash
 git clone https://github.com/smartlegionlab/forgejo-sync-manager.git
 cd forgejo-sync-manager
+python -m venv venv
+source venv/bin/activate
+python app.py
+```
+
+## Usage
+
+```bash
 python app.py
 ```
 
@@ -53,12 +61,6 @@ On first run, the tool will guide you through:
 2. Personal access token with `read:repository` and `read:user` scopes
 
 Configuration is stored in `~/forgejo-sync-manager/config.json`
-
-## Usage
-
-```bash
-python app.py
-```
 
 ### Main Menu
 

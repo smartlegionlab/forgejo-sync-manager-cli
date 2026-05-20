@@ -39,6 +39,10 @@ def main():
     ui.show_phase(2, "Configuration Loading")
     existing_config = config_manager.load()
 
+    client = None
+    user_info = None
+    repos = None
+
     if existing_config and existing_config.get("token"):
         ui.show_success("Configuration file found")
         auth = ForgejoAuth(

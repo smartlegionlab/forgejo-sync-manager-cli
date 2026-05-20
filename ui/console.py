@@ -70,7 +70,7 @@ class ConsoleUI:
         self.config_manager.save(config)
 
     @staticmethod
-    def show_connection_status(auth: ForgejoAuth, user_data: dict = None):
+    def show_connection_status(auth: ForgejoAuth, user_data):
         print(f"\n{'─' * 50}")
         print("CONNECTION STATUS")
         print(f"{'─' * 50}")
@@ -187,7 +187,7 @@ class ConsoleUI:
     def show_updates_result(updates_count: int):
         print("\n" + "─" * 50)
         if updates_count == 0:
-            print("No updates available. All repositories are up to date.")
+            print("No updates available. \nAll repositories are up to date.")
         else:
             print(f"Found {updates_count} repositories with updates available.")
         print("─" * 50)
@@ -249,13 +249,12 @@ class ConsoleUI:
         print("\n" + "─" * 50)
         print("ABOUT")
         print("─" * 50)
-        print(f"  {ConfigManager.APP_FULL_NAME}")
+        print(f"  {ConfigManager.APP_FULL_NAME} v{ConfigManager.VERSION}")
         print("  CLI tool for batch synchronization of Forgejo repositories")
         print("")
         print("  Author:     Alexander Suvorov")
-        print("  GitHub:     https://github.com/smartlegionlab")
-        print("  Repository: https://github.com/smartlegionlab/forgejo-sync-manager")
         print("  License:    BSD 3-Clause")
+        print("  Repository: https://github.com/smartlegionlab/forgejo-sync-manager")
         print("  Disclaimer: https://github.com/smartlegionlab/forgejo-sync-manager/blob/master/DISCLAIMER.md")
         print("─" * 50)
         input("\nPress Enter to continue...")
