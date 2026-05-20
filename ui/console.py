@@ -26,25 +26,31 @@ class ConsoleUI:
         print(f"#  Repository sync tool for Forgejo")
         print(f"{'#' * 50}")
 
-    def prompt_for_auth(self) -> ForgejoAuth:
-        print("\nEnter connection details:")
-
-        username = input("  Username: ").strip()
-        token = input("  Access token: ").strip()
+    def prompt_server_url(self) -> str:
+        print("\nEnter Forgejo server URL:")
         server_url = input("  Server URL (e.g., http://localhost:3000): ").strip()
+        return server_url
 
-        return ForgejoAuth(username, token, server_url)
+    def prompt_token(self) -> str:
+        token = input("  Access token: ").strip()
+        return token
 
-    def prompt_retry_or_exit(self) -> str:
+    def prompt_retry_server(self) -> str:
+        print("\n[!] Server connection failed")
+        print("  1. Try again with different server URL")
+        print("  2. Exit")
+        choice = input("Select (1/2): ").strip()
+        return choice
+
+    def prompt_retry_auth(self) -> str:
         print("\n[!] Authentication failed")
-        print("  1. Retry with new credentials")
+        print("  1. Try again with different token")
         print("  2. Exit")
         choice = input("Select (1/2): ").strip()
         return choice
 
     def save_auth(self, auth: ForgejoAuth):
         config = {
-            "username": auth.username,
             "token": auth.token,
             "server_url": auth.server_url
         }
@@ -57,8 +63,8 @@ class ConsoleUI:
         print(f"  Server:     {auth.server_url}")
         print(f"  API:        {auth.get_api_url()}")
         print(f"  Status:     Connected")
-        print(f"  User:       {auth.username}")
         if user_data:
+            print(f"  User:       {user_data.get('login', 'N/A')}")
             print(f"  Full name:  {user_data.get('full_name', 'N/A')}")
             print(f"  Email:      {user_data.get('email', 'N/A')}")
         print(f"{'─' * 50}")
@@ -69,6 +75,7 @@ class ConsoleUI:
         print("=" * 50)
         print("  1. User Info")
         print("  2. Repository Statistics")
+        print("  3. Settings")
         print("  0. Exit")
         print("=" * 50)
 
@@ -130,3 +137,25 @@ class ConsoleUI:
         print(f"  Recloned: {results['recloned']}")
         print(f"  Failed:   {results['failed']}")
         print("─" * 50)
+
+    def show_settings(self, auth: ForgejoAuth):
+        masked_token = ""
+        if auth.token and len(auth.token) >= 8:
+            masked_token = auth.token[:4] + "*" * (len(auth.token) - 8) + auth.token[-4:]
+        elif auth.token:
+            masked_token = "*" * len(auth.token)
+
+        print("\n" + "─" * 50)
+        print("SETTINGS")
+        print("─" * 50)
+        print(f"  Server URL:  {auth.server_url if auth.server_url else 'Not set'}")
+        print(f"  Token:       {masked_token if auth.token else 'Not set'}")
+        print("─" * 50)
+        print("  1. Full Reset")
+        print("  0. Back to Main Menu")
+        print("=" * 50)
+
+    def confirm_reset(self) -> bool:
+        print("\n[!] WARNING: This will delete all configuration data.")
+        confirm = input("Are you sure? (yes/no): ").strip().lower()
+        return confirm == "yes"

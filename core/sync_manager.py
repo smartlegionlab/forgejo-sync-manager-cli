@@ -8,7 +8,7 @@ from core.auth import ForgejoAuth
 class SyncManager:
     def __init__(self, auth: ForgejoAuth):
         self.auth = auth
-        self.base_dir = Path.home() / "forgejo-sync" / auth.username
+        self.base_dir = Path.home() / "forgejo-sync"
         self.repos_dir = self.base_dir / "repositories"
 
     def ensure_directories(self):
@@ -19,7 +19,7 @@ class SyncManager:
     def get_authenticated_url(self, clone_url: str):
         from urllib.parse import urlparse
         parsed = urlparse(clone_url)
-        authenticated_url = f"{parsed.scheme}://{self.auth.username}:{self.auth.token}@{parsed.netloc}{parsed.path}"
+        authenticated_url = f"{parsed.scheme}://{self.auth.token}@{parsed.netloc}{parsed.path}"
         return authenticated_url
 
     def sync_repository(self, repo, current_index: int, total: int, failed_count: int):

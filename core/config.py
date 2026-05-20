@@ -29,3 +29,6 @@ class ConfigManager:
     def save(self, data):
         with open(self.config_path, 'w') as f:
             json.dump(data, f, indent=4)
+
+    def reset(self):
+        self._create_default_config()

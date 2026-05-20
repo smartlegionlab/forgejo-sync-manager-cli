@@ -1,9 +1,29 @@
 import sys
+import os
 from ui.console import ConsoleUI
 from core.auth import ForgejoAuth
 from core.api_client import ForgejoAPIClient
 from core.sync_manager import SyncManager
 import requests
+
+
+def restart_app():
+    python = sys.executable
+    os.execl(python, python, *sys.argv)
+
+
+def test_server_connection(server_url: str):
+    test_auth = ForgejoAuth(server_url=server_url)
+    test_client = ForgejoAPIClient(test_auth)
+    test_client.test_connection()
+    return True
+
+
+def test_auth_connection(auth: ForgejoAuth):
+    client = ForgejoAPIClient(auth)
+    client.test_connection()
+    client.get_user_info()
+    return True
 
 
 def main():
@@ -17,10 +37,9 @@ def main():
     ui.show_phase(2, "Configuration Loading")
     existing_config = config_manager.load()
 
-    if existing_config and existing_config.get("username"):
+    if existing_config and existing_config.get("token"):
         ui.show_success("Configuration file found")
         auth = ForgejoAuth(
-            username=existing_config.get("username", ""),
             token=existing_config.get("token", ""),
             server_url=existing_config.get("server_url", "")
         )
@@ -30,32 +49,69 @@ def main():
 
     while True:
         if not auth or not auth.is_configured():
-            ui.show_info("Authentication required")
-            auth = ui.prompt_for_auth()
+            while True:
+                ui.show_phase(3, "Server Connection Test")
+                server_url = ui.prompt_server_url()
+
+                try:
+                    test_server_connection(server_url)
+                    ui.show_success(f"Connected to {server_url}")
+                    auth = ForgejoAuth(server_url=server_url)
+                    break
+                except requests.exceptions.ConnectionError:
+                    ui.show_error(f"Cannot connect to {server_url}")
+                    choice = ui.prompt_retry_server()
+                    if choice == "2":
+                        ui.show_info("Exiting...")
+                        sys.exit(0)
+                    continue
+                except Exception as e:
+                    ui.show_error(f"Server error: {e}")
+                    choice = ui.prompt_retry_server()
+                    if choice == "2":
+                        ui.show_info("Exiting...")
+                        sys.exit(0)
+                    continue
+
+            while True:
+                ui.show_phase(4, "Authentication Test")
+                token = ui.prompt_token()
+
+                auth.token = token
+
+                try:
+                    test_auth_connection(auth)
+                    ui.show_success("Authentication successful")
+                    break
+                except requests.exceptions.HTTPError as e:
+                    ui.show_error(f"Authentication failed: {e}")
+                    choice = ui.prompt_retry_auth()
+                    if choice == "2":
+                        ui.show_info("Exiting...")
+                        sys.exit(0)
+                    continue
+                except Exception as e:
+                    ui.show_error(f"Connection error: {e}")
+                    choice = ui.prompt_retry_auth()
+                    if choice == "2":
+                        ui.show_info("Exiting...")
+                        sys.exit(0)
+                    continue
 
             try:
                 client = ForgejoAPIClient(auth)
-                client.test_connection()
                 user_info = client.get_user_info()
                 repos = client.get_user_repos()
 
                 ui.save_auth(auth)
-                ui.show_success("Authentication successful")
+                ui.show_success("Configuration saved")
 
-                ui.show_phase(3, "Connection Summary")
+                ui.show_phase(5, "Connection Summary")
                 ui.show_connection_status(auth, user_info)
                 break
 
-            except requests.exceptions.HTTPError as e:
-                ui.show_error(f"Authentication failed: {e}")
-                choice = ui.prompt_retry_or_exit()
-                if choice == "2":
-                    ui.show_info("Exiting...")
-                    sys.exit(0)
-                auth = None
-                continue
             except Exception as e:
-                ui.show_error(f"Connection error: {e}")
+                ui.show_error(f"Failed to fetch data: {e}")
                 sys.exit(1)
         else:
             try:
@@ -70,6 +126,10 @@ def main():
                 ui.show_connection_status(auth, user_info)
                 break
 
+            except requests.exceptions.ConnectionError:
+                ui.show_error("Server connection failed")
+                auth = None
+                continue
             except requests.exceptions.HTTPError:
                 ui.show_error("Token invalid or expired")
                 auth = None
@@ -114,6 +174,22 @@ def main():
 
                     input("\nPress Enter to continue...")
                 elif repo_choice == "0":
+                    break
+                else:
+                    ui.show_error("Invalid option")
+        elif choice == "3":
+            while True:
+                ui.show_settings(auth)
+                settings_choice = ui.get_menu_choice()
+
+                if settings_choice == "1":
+                    if ui.confirm_reset():
+                        config_manager.reset()
+                        ui.show_info("Configuration reset. Restarting...")
+                        restart_app()
+                    else:
+                        ui.show_info("Reset cancelled")
+                elif settings_choice == "0":
                     break
                 else:
                     ui.show_error("Invalid option")
