@@ -109,6 +109,7 @@ class ConsoleUI:
         print("REPOSITORY MENU")
         print("=" * 50)
         print("  1. Sync All Repositories")
+        print("  2. Reclone All Repositories")
         print("  0. Back to Main Menu")
         print("=" * 50)
 
@@ -119,4 +120,13 @@ class ConsoleUI:
         print(f"  Cloned:  {results['cloned']}")
         print(f"  Updated: {results['updated']}")
         print(f"  Failed:  {results['failed']}")
+        print("─" * 50)
+
+    def show_reclone_results(self, results: dict):
+        print("\n" + "─" * 50)
+        print("RECLONE COMPLETED")
+        print("─" * 50)
+        print(f"  Cloned:   {results['cloned']}")
+        print(f"  Recloned: {results['recloned']}")
+        print(f"  Failed:   {results['failed']}")
         print("─" * 50)

@@ -102,6 +102,17 @@ def main():
                     ui.show_sync_results(results)
 
                     input("\nPress Enter to continue...")
+                elif repo_choice == "2":
+                    print("\n" + "─" * 50)
+                    print("RECLONING REPOSITORIES")
+                    print("─" * 50)
+
+                    sync_manager = SyncManager(auth)
+                    results = sync_manager.reclone_all_repositories(repos)
+
+                    ui.show_reclone_results(results)
+
+                    input("\nPress Enter to continue...")
                 elif repo_choice == "0":
                     break
                 else:
