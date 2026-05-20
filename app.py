@@ -36,6 +36,7 @@ def main():
                 client = ForgejoAPIClient(auth)
                 client.test_connection()
                 user_info = client.get_user_info()
+                repos = client.get_user_repos()
 
                 ui.save_auth(auth)
                 ui.show_success("Authentication successful")
@@ -60,6 +61,7 @@ def main():
                 client = ForgejoAPIClient(auth)
                 client.test_connection()
                 user_info = client.get_user_info()
+                repos = client.get_user_repos()
 
                 ui.show_success("Authentication successful")
 
@@ -81,6 +83,8 @@ def main():
 
         if choice == "1":
             ui.show_user_info(user_info)
+        elif choice == "2":
+            ui.show_repo_statistics(repos)
         elif choice == "0":
             ui.show_info("Goodbye!")
             sys.exit(0)

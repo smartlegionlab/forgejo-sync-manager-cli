@@ -68,6 +68,7 @@ class ConsoleUI:
         print("MAIN MENU")
         print("=" * 50)
         print("  1. User Info")
+        print("  2. Repository Statistics")
         print("  0. Exit")
         print("=" * 50)
 
@@ -84,4 +85,21 @@ class ConsoleUI:
         print(f"  User ID:     {user_data.get('id', 'N/A')}")
         print(f"  Created:     {user_data.get('created_at', 'N/A')}")
         print(f"  Admin:       {user_data.get('is_admin', False)}")
+        print("─" * 50)
+
+    def show_repo_statistics(self, repos: list):
+        total = len(repos)
+        private = sum(1 for r in repos if r.get('private', False))
+        public = total - private
+        forks = sum(1 for r in repos if r.get('fork', False))
+        sources = sum(1 for r in repos if not r.get('fork', False))
+
+        print("\n" + "─" * 50)
+        print("REPOSITORY STATISTICS")
+        print("─" * 50)
+        print(f"  Total repositories:  {total}")
+        print(f"  Public:              {public}")
+        print(f"  Private:             {private}")
+        print(f"  Forks:               {forks}")
+        print(f"  Source repositories: {sources}")
         print("─" * 50)
