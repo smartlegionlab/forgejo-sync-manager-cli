@@ -6,34 +6,41 @@ class ConsoleUI:
     def __init__(self):
         self.config_manager = ConfigManager()
 
+    def show_phase(self, phase_num: int, phase_name: str):
+        print(f"\n{'=' * 50}")
+        print(f"PHASE {phase_num}: {phase_name}")
+        print(f"{'=' * 50}")
+
+    def show_success(self, message: str):
+        print(f"[✓] {message}")
+
+    def show_error(self, message: str):
+        print(f"[✗] {message}")
+
+    def show_info(self, message: str):
+        print(f"[i] {message}")
+
     def show_welcome(self):
-        print("=" * 50)
-        print(f"  Welcome to {self.config_manager.APP_NAME}!")
-        print("  Repository sync tool for Forgejo")
-        print("=" * 50)
-        print()
+        print(f"\n{'#' * 50}")
+        print(f"#  Welcome to {self.config_manager.APP_NAME.upper()}!")
+        print(f"#  Repository sync tool for Forgejo")
+        print(f"{'#' * 50}")
 
     def prompt_for_auth(self) -> ForgejoAuth:
-        print("Forgejo Connection Setup:")
-        print("(Leave empty to use existing config values)\n")
+        print("\nEnter connection details:")
 
-        existing_config = self.config_manager.load()
+        username = input("  Username: ").strip()
+        token = input("  Access token: ").strip()
+        server_url = input("  Server URL (e.g., http://localhost:3000): ").strip()
 
-        auth = ForgejoAuth()
+        return ForgejoAuth(username, token, server_url)
 
-        if existing_config.get("username"):
-            print(f"Current username: {existing_config['username']}")
-
-        username = input("Enter username: ").strip()
-        auth.username = username if username else existing_config.get("username", "")
-
-        token = input("Enter access token: ").strip()
-        auth.token = token if token else existing_config.get("token", "")
-
-        server = input("Enter server URL (e.g., http://localhost:3000): ").strip()
-        auth.server_url = server if server else existing_config.get("server_url", "")
-
-        return auth
+    def prompt_retry_or_exit(self) -> str:
+        print("\n[!] Authentication failed")
+        print("  1. Retry with new credentials")
+        print("  2. Exit")
+        choice = input("Select (1/2): ").strip()
+        return choice
 
     def save_auth(self, auth: ForgejoAuth):
         config = {
@@ -42,13 +49,26 @@ class ConsoleUI:
             "server_url": auth.server_url
         }
         self.config_manager.save(config)
-        print("[OK] Configuration saved")
 
-    def show_config_status(self, auth: ForgejoAuth):
-        if auth.is_configured():
-            print("\n[OK] Configuration loaded:")
-            print(f"    Server: {auth.server_url}")
-            print(f"    Username: {auth.username}")
-            print(f"    API URL: {auth.get_api_url()}")
-        else:
-            print("\n[WARNING] Incomplete configuration")
+    def show_connection_status(self, auth: ForgejoAuth, user_data: dict = None):
+        print(f"\n{'─' * 50}")
+        print("CONNECTION STATUS")
+        print(f"{'─' * 50}")
+        print(f"  Server:     {auth.server_url}")
+        print(f"  API:        {auth.get_api_url()}")
+        print(f"  Status:     {self.config_manager.APP_NAME}")
+        print(f"  User:       {auth.username}")
+        if user_data:
+            print(f"  Full name:  {user_data.get('full_name', 'N/A')}")
+            print(f"  Email:      {user_data.get('email', 'N/A')}")
+        print(f"{'─' * 50}")
+
+    def show_main_menu(self):
+        print("\n" + "=" * 50)
+        print("MAIN MENU")
+        print("=" * 50)
+        print("  1. Exit")
+        print("=" * 50)
+
+    def get_menu_choice(self) -> str:
+        return input("\nSelect option: ").strip()

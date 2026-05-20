@@ -1,10 +1,9 @@
 import json
-import os
 from pathlib import Path
 
 
 class ConfigManager:
-    APP_NAME = "Forgejo Sync"
+    APP_NAME = "forgejo-sync"
 
     def __init__(self):
         self.app_dir = None
@@ -26,7 +25,6 @@ class ConfigManager:
     def load(self):
         with open(self.config_path, 'r') as f:
             return json.load(f)
-        return None
 
     def save(self, data):
         with open(self.config_path, 'w') as f:
