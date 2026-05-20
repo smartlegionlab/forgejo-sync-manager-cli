@@ -56,7 +56,7 @@ class ConsoleUI:
         print(f"{'─' * 50}")
         print(f"  Server:     {auth.server_url}")
         print(f"  API:        {auth.get_api_url()}")
-        print(f"  Status:     {self.config_manager.APP_NAME}")
+        print(f"  Status:     Connected")
         print(f"  User:       {auth.username}")
         if user_data:
             print(f"  Full name:  {user_data.get('full_name', 'N/A')}")
@@ -67,8 +67,21 @@ class ConsoleUI:
         print("\n" + "=" * 50)
         print("MAIN MENU")
         print("=" * 50)
-        print("  1. Exit")
+        print("  1. User Info")
+        print("  0. Exit")
         print("=" * 50)
 
     def get_menu_choice(self) -> str:
         return input("\nSelect option: ").strip()
+
+    def show_user_info(self, user_data: dict):
+        print("\n" + "─" * 50)
+        print("USER INFORMATION")
+        print("─" * 50)
+        print(f"  Username:    {user_data.get('login', 'N/A')}")
+        print(f"  Full name:   {user_data.get('full_name', 'N/A')}")
+        print(f"  Email:       {user_data.get('email', 'N/A')}")
+        print(f"  User ID:     {user_data.get('id', 'N/A')}")
+        print(f"  Created:     {user_data.get('created_at', 'N/A')}")
+        print(f"  Admin:       {user_data.get('is_admin', False)}")
+        print("─" * 50)

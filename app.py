@@ -16,7 +16,7 @@ def main():
     ui.show_phase(2, "Configuration Loading")
     existing_config = config_manager.load()
 
-    if existing_config:
+    if existing_config and existing_config.get("username"):
         ui.show_success("Configuration file found")
         auth = ForgejoAuth(
             username=existing_config.get("username", ""),
@@ -80,6 +80,8 @@ def main():
         choice = ui.get_menu_choice()
 
         if choice == "1":
+            ui.show_user_info(user_info)
+        elif choice == "0":
             ui.show_info("Goodbye!")
             sys.exit(0)
         else:
