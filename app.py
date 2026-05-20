@@ -34,7 +34,7 @@ def main():
 
     ui.show_phase(1, "Directory Structure Check")
     config_manager = ui.config_manager
-    ui.show_success(f"Application directory: {config_manager.app_dir}")
+    ui.show_success(f"Application directory: \n{config_manager.app_dir}")
 
     ui.show_phase(2, "Configuration Loading")
     existing_config = config_manager.load()
@@ -212,7 +212,10 @@ def main():
                     break
                 else:
                     ui.show_error("Invalid option")
+        elif choice == "4":
+            ui.show_about()
         elif choice == "0":
+            print(f"\n{'-' * 50}")
             ui.show_info("Goodbye!")
             sys.exit(0)
         else:

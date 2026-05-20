@@ -65,6 +65,7 @@ python app.py
 - `1` - Display user information
 - `2` - Repository operations
 - `3` - Settings (full reset)
+- `4` - About (author, repository, license, disclaimer)
 - `0` - Exit
 
 ### Repository Menu
@@ -90,6 +91,4 @@ python app.py
 
 Copyright (©) 2026, [Alexander Suvorov](https://github.com/smartlegionlab)
 All rights reserved.
-
----
 

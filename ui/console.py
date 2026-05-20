@@ -1,5 +1,6 @@
 # Copyright (©) 2026, Alexander Suvorov. All rights reserved.
 # License: BSD 3-Clause
+import time
 from core.config import ConfigManager
 from core.auth import ForgejoAuth
 
@@ -8,43 +9,52 @@ class ConsoleUI:
     def __init__(self):
         self.config_manager = ConfigManager()
 
-    def show_phase(self, phase_num: int, phase_name: str):
+    @staticmethod
+    def show_phase(phase_num: int, phase_name: str):
         print(f"\n{'=' * 50}")
         print(f"PHASE {phase_num}: {phase_name}")
         print(f"{'=' * 50}")
 
-    def show_success(self, message: str):
+    @staticmethod
+    def show_success(message: str):
         print(f"[✓] {message}")
 
-    def show_error(self, message: str):
+    @staticmethod
+    def show_error(message: str):
         print(f"[✗] {message}")
 
-    def show_info(self, message: str):
+    @staticmethod
+    def show_info(message: str):
         print(f"[i] {message}")
 
     def show_welcome(self):
         print(f"\n{'#' * 50}")
-        print(f"#  Welcome to {self.config_manager.APP_NAME.upper()}!")
+        print(f"#  Welcome to {self.config_manager.APP_FULL_NAME.upper()}")
         print(f"#  Repository sync tool for Forgejo")
         print(f"{'#' * 50}")
+        time.sleep(1)
 
-    def prompt_server_url(self) -> str:
+    @staticmethod
+    def prompt_server_url() -> str:
         print("\nEnter Forgejo server URL:")
         server_url = input("  Server URL (e.g., http://localhost:3000): ").strip()
         return server_url
 
-    def prompt_token(self) -> str:
+    @staticmethod
+    def prompt_token() -> str:
         token = input("  Access token: ").strip()
         return token
 
-    def prompt_retry_server(self) -> str:
+    @staticmethod
+    def prompt_retry_server() -> str:
         print("\n[!] Server connection failed")
         print("  1. Try again with different server URL")
         print("  2. Exit")
         choice = input("Select (1/2): ").strip()
         return choice
 
-    def prompt_retry_auth(self) -> str:
+    @staticmethod
+    def prompt_retry_auth() -> str:
         print("\n[!] Authentication failed")
         print("  1. Try again with different token")
         print("  2. Exit")
@@ -59,7 +69,8 @@ class ConsoleUI:
         }
         self.config_manager.save(config)
 
-    def show_connection_status(self, auth: ForgejoAuth, user_data: dict = None):
+    @staticmethod
+    def show_connection_status(auth: ForgejoAuth, user_data: dict = None):
         print(f"\n{'─' * 50}")
         print("CONNECTION STATUS")
         print(f"{'─' * 50}")
@@ -72,20 +83,24 @@ class ConsoleUI:
             print(f"  Email:      {user_data.get('email', 'N/A')}")
         print(f"{'─' * 50}")
 
-    def show_main_menu(self):
+    @staticmethod
+    def show_main_menu():
         print("\n" + "=" * 50)
         print("MAIN MENU")
         print("=" * 50)
         print("  1. User Info")
         print("  2. Repositories")
         print("  3. Settings")
+        print("  4. About")
         print("  0. Exit")
         print("=" * 50)
 
-    def get_menu_choice(self) -> str:
+    @staticmethod
+    def get_menu_choice() -> str:
         return input("\nSelect option: ").strip()
 
-    def show_user_info(self, user_data: dict):
+    @staticmethod
+    def show_user_info(user_data: dict):
         print("\n" + "─" * 50)
         print("USER INFORMATION")
         print("─" * 50)
@@ -101,8 +116,10 @@ class ConsoleUI:
 
         print(f"  Admin:       {user_data.get('is_admin', False)}")
         print("─" * 50)
+        input("\nPress Enter to continue...")
 
-    def show_repo_statistics(self, repos: list):
+    @staticmethod
+    def show_repo_statistics(repos: list):
         total = len(repos)
         private = sum(1 for r in repos if r.get('private', False))
         public = total - private
@@ -119,18 +136,19 @@ class ConsoleUI:
         print(f"  Source repositories: {sources}")
         print("─" * 50)
 
-    def show_repo_list(self, repos: list):
-        print("\n" + "─" * 100)
+    @staticmethod
+    def show_repo_list(repos: list):
+        print("\n" + "─" * 110)
         print("REPOSITORY LIST")
-        print("─" * 100)
-        print(f"{'Repository Name':<50} {'Type':<10} {'Size (MB)':<15}")
-        print("─" * 100)
+        print("─" * 110)
+        print(f"{'#':<4} {'Repository Name':<50} {'Type':<10} {'Size (MB)':<15}")
+        print("─" * 110)
 
         total_size = 0
         private_count = 0
         public_count = 0
 
-        for repo in repos:
+        for n, repo in enumerate(repos, 1):
             name = repo.get('name', 'N/A')
             private = repo.get('private', False)
             repo_type = "Private" if private else "Public"
@@ -143,16 +161,17 @@ class ConsoleUI:
 
             total_size += size
 
-            print(f"{name:<50} {repo_type:<10} {size:.2f}")
+            print(f"{n:<4} {name:<50} {repo_type:<10} {size:.2f}")
 
-        print("─" * 100)
-        print(f"{'TOTAL':<50} {public_count + private_count:<10} {total_size:.2f}")
-        print(f"{'Public':<50} {public_count:<10}")
-        print(f"{'Private':<50} {private_count:<10}")
-        print("─" * 100)
+        print("─" * 110)
+        print(f"{'TOTAL':<55} {public_count + private_count:<10} {total_size:.2f}")
+        print(f"{'Public':<55} {public_count:<10}")
+        print(f"{'Private':<55} {private_count:<10}")
+        print("─" * 110)
         input("\nPress Enter to continue...")
 
-    def show_repo_menu(self):
+    @staticmethod
+    def show_repo_menu():
         print("\n" + "=" * 50)
         print("REPOSITORY MENU")
         print("=" * 50)
@@ -164,7 +183,8 @@ class ConsoleUI:
         print("  0. Back to Main Menu")
         print("=" * 50)
 
-    def show_updates_result(self, updates_count: int):
+    @staticmethod
+    def show_updates_result(updates_count: int):
         print("\n" + "─" * 50)
         if updates_count == 0:
             print("No updates available. All repositories are up to date.")
@@ -172,14 +192,16 @@ class ConsoleUI:
             print(f"Found {updates_count} repositories with updates available.")
         print("─" * 50)
 
-    def prompt_update_choice(self, updates_count: int) -> str:
+    @staticmethod
+    def prompt_update_choice(updates_count: int) -> str:
         if updates_count == 0:
             return "0"
         print("\n  1. Update all")
         print("  0. Cancel")
         return input("\nSelect option: ").strip()
 
-    def show_sync_results(self, results: dict):
+    @staticmethod
+    def show_sync_results(results: dict):
         print("\n" + "─" * 50)
         print("UPDATE COMPLETED")
         print("─" * 50)
@@ -188,7 +210,8 @@ class ConsoleUI:
         print(f"  Failed:  {results['failed']}")
         print("─" * 50)
 
-    def show_reclone_results(self, results: dict):
+    @staticmethod
+    def show_reclone_results(results: dict):
         print("\n" + "─" * 50)
         print("RECLONE COMPLETED")
         print("─" * 50)
@@ -197,7 +220,8 @@ class ConsoleUI:
         print(f"  Failed:   {results['failed']}")
         print("─" * 50)
 
-    def show_settings(self, auth: ForgejoAuth):
+    @staticmethod
+    def show_settings(auth: ForgejoAuth):
         masked_token = ""
         if auth.token and len(auth.token) >= 8:
             masked_token = auth.token[:4] + "*" * (len(auth.token) - 8) + auth.token[-4:]
@@ -214,7 +238,24 @@ class ConsoleUI:
         print("  0. Back to Main Menu")
         print("=" * 50)
 
-    def confirm_reset(self) -> bool:
+    @staticmethod
+    def confirm_reset() -> bool:
         print("\n[!] WARNING: This will delete all configuration data.")
         confirm = input("Are you sure? (yes/no): ").strip().lower()
         return confirm == "yes"
+
+    @staticmethod
+    def show_about():
+        print("\n" + "─" * 50)
+        print("ABOUT")
+        print("─" * 50)
+        print(f"  {ConfigManager.APP_FULL_NAME}")
+        print("  CLI tool for batch synchronization of Forgejo repositories")
+        print("")
+        print("  Author:     Alexander Suvorov")
+        print("  GitHub:     https://github.com/smartlegionlab")
+        print("  Repository: https://github.com/smartlegionlab/forgejo-sync-manager")
+        print("  License:    BSD 3-Clause")
+        print("  Disclaimer: https://github.com/smartlegionlab/forgejo-sync-manager/blob/master/DISCLAIMER.md")
+        print("─" * 50)
+        input("\nPress Enter to continue...")
