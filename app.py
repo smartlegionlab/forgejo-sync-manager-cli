@@ -2,6 +2,7 @@ import sys
 from ui.console import ConsoleUI
 from core.auth import ForgejoAuth
 from core.api_client import ForgejoAPIClient
+from core.sync_manager import SyncManager
 import requests
 
 
@@ -84,7 +85,25 @@ def main():
         if choice == "1":
             ui.show_user_info(user_info)
         elif choice == "2":
-            ui.show_repo_statistics(repos)
+            while True:
+                ui.show_repo_menu()
+                repo_choice = ui.get_menu_choice()
+
+                if repo_choice == "1":
+                    print("\n" + "─" * 50)
+                    print("SYNCHRONIZING REPOSITORIES")
+                    print("─" * 50)
+
+                    sync_manager = SyncManager(auth)
+                    results = sync_manager.sync_all_repositories(repos)
+
+                    ui.show_sync_results(results)
+
+                    input("\nPress Enter to continue...")
+                elif repo_choice == "0":
+                    break
+                else:
+                    ui.show_error("Invalid option")
         elif choice == "0":
             ui.show_info("Goodbye!")
             sys.exit(0)

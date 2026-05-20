@@ -103,3 +103,20 @@ class ConsoleUI:
         print(f"  Forks:               {forks}")
         print(f"  Source repositories: {sources}")
         print("─" * 50)
+
+    def show_repo_menu(self):
+        print("\n" + "=" * 50)
+        print("REPOSITORY MENU")
+        print("=" * 50)
+        print("  1. Sync All Repositories")
+        print("  0. Back to Main Menu")
+        print("=" * 50)
+
+    def show_sync_results(self, results: dict):
+        print("\n" + "─" * 50)
+        print("SYNC COMPLETED")
+        print("─" * 50)
+        print(f"  Cloned:  {results['cloned']}")
+        print(f"  Updated: {results['updated']}")
+        print(f"  Failed:  {results['failed']}")
+        print("─" * 50)
