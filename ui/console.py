@@ -74,7 +74,7 @@ class ConsoleUI:
         print("MAIN MENU")
         print("=" * 50)
         print("  1. User Info")
-        print("  2. Repository Statistics")
+        print("  2. Repositories")
         print("  3. Settings")
         print("  0. Exit")
         print("=" * 50)
@@ -102,7 +102,7 @@ class ConsoleUI:
         sources = sum(1 for r in repos if not r.get('fork', False))
 
         print("\n" + "─" * 50)
-        print("REPOSITORY STATISTICS")
+        print("REPOSITORIES OVERVIEW")
         print("─" * 50)
         print(f"  Total repositories:  {total}")
         print(f"  Public:              {public}")
@@ -111,12 +111,32 @@ class ConsoleUI:
         print(f"  Source repositories: {sources}")
         print("─" * 50)
 
+    def show_repo_list(self, repos: list):
+        print("\n" + "─" * 100)
+        print("REPOSITORY LIST")
+        print("─" * 100)
+        print(f"{'Repository Name':<50} {'Type':<10} {'Size (MB)':<15}")
+        print("─" * 100)
+
+        for repo in repos:
+            name = repo.get('name', 'N/A')
+            private = repo.get('private', False)
+            repo_type = "Private" if private else "Public"
+            size = repo.get('size', 0) / 1024
+
+            print(f"{name:<50} {repo_type:<10} {size:.2f}")
+
+        print("─" * 100)
+        input("\nPress Enter to continue...")
+
     def show_repo_menu(self):
         print("\n" + "=" * 50)
         print("REPOSITORY MENU")
         print("=" * 50)
-        print("  1. Sync All Repositories")
-        print("  2. Reclone All Repositories")
+        print("  1. Show Statistics")
+        print("  2. Show All Repositories")
+        print("  3. Sync All Repositories")
+        print("  4. Reclone All Repositories")
         print("  0. Back to Main Menu")
         print("=" * 50)
 

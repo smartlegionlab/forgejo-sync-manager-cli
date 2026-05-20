@@ -145,13 +145,16 @@ def main():
         if choice == "1":
             ui.show_user_info(user_info)
         elif choice == "2":
-            ui.show_repo_statistics(repos)
-
             while True:
                 ui.show_repo_menu()
                 repo_choice = ui.get_menu_choice()
 
                 if repo_choice == "1":
+                    ui.show_repo_statistics(repos)
+                    input("\nPress Enter to continue...")
+                elif repo_choice == "2":
+                    ui.show_repo_list(repos)
+                elif repo_choice == "3":
                     print("\n" + "─" * 50)
                     print("SYNCHRONIZING REPOSITORIES")
                     print("─" * 50)
@@ -162,7 +165,7 @@ def main():
                     ui.show_sync_results(results)
 
                     input("\nPress Enter to continue...")
-                elif repo_choice == "2":
+                elif repo_choice == "4":
                     print("\n" + "─" * 50)
                     print("RECLONING REPOSITORIES")
                     print("─" * 50)
