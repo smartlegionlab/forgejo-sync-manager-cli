@@ -1,4 +1,4 @@
-# forgejo-sync-manager <sup>v0.1.2</sup>
+# forgejo-sync-manager <sup>v1.0.1</sup>
 
 CLI tool for batch synchronization of Forgejo repositories to local machine.
 
