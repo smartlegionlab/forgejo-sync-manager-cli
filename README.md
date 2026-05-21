@@ -4,11 +4,11 @@ CLI tool for batch synchronization of Forgejo repositories to local machine.
 
 ---
 
-[![GitHub top language](https://img.shields.io/github/languages/top/smartlegionlab/forgejo-sync-manager)](https://github.com/smartlegionlab/forgejo-sync-manager)
-[![GitHub license](https://img.shields.io/github/license/smartlegionlab/forgejo-sync-manager)](https://github.com/smartlegionlab/forgejo-sync-manager/blob/master/LICENSE)
-[![GitHub release](https://img.shields.io/github/v/release/smartlegionlab/forgejo-sync-manager)](https://github.com/smartlegionlab/forgejo-sync-manager/)
-[![GitHub stars](https://img.shields.io/github/stars/smartlegionlab/forgejo-sync-manager?style=social)](https://github.com/smartlegionlab/forgejo-sync-manager/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/smartlegionlab/forgejo-sync-manager?style=social)](https://github.com/smartlegionlab/forgejo-sync-manager/network/members)
+[![GitHub top language](https://img.shields.io/github/languages/top/smartlegionlab/forgejo-sync-manager-cli)](https://github.com/smartlegionlab/forgejo-sync-manager-cli)
+[![GitHub license](https://img.shields.io/github/license/smartlegionlab/forgejo-sync-manager-cli)](https://github.com/smartlegionlab/forgejo-sync-manager-cli/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/v/release/smartlegionlab/forgejo-sync-manager-cli)](https://github.com/smartlegionlab/forgejo-sync-manager-cli/)
+[![GitHub stars](https://img.shields.io/github/stars/smartlegionlab/forgejo-sync-manager-cli?style=social)](https://github.com/smartlegionlab/forgejo-sync-manager-cli/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/smartlegionlab/forgejo-sync-manager-cli?style=social)](https://github.com/smartlegionlab/forgejo-sync-manager-cli/network/members)
 
 ---
 
@@ -18,7 +18,7 @@ CLI tool for batch synchronization of Forgejo repositories to local machine.
 
 **Summary:** Software provided "AS IS" without warranty. You assume all risks.
 
-**Full legal disclaimer:** See [DISCLAIMER.md](https://github.com/smartlegionlab/forgejo-sync-manager/blob/master/DISCLAIMER.md)
+**Full legal disclaimer:** See [DISCLAIMER.md](https://github.com/smartlegionlab/forgejo-sync-manager-cli/blob/master/DISCLAIMER.md)
 
 ---
 
@@ -40,8 +40,8 @@ CLI tool for batch synchronization of Forgejo repositories to local machine.
 ## Installation
 
 ```bash
-git clone https://github.com/smartlegionlab/forgejo-sync-manager.git
-cd forgejo-sync-manager
+git clone https://github.com/smartlegionlab/forgejo-sync-manager-cli.git
+cd forgejo-sync-manager-cli
 python -m venv venv
 source venv/bin/activate
 python app.py
