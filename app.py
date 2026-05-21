@@ -5,7 +5,7 @@ import os
 from ui.console import ConsoleUI
 from core.auth import ForgejoAuth
 from core.api_client import ForgejoAPIClient
-from core.sync_manager import SyncManager
+from core.sync_manager_cli import CLISyncManager
 import requests
 
 
@@ -145,7 +145,7 @@ def main():
                 ui.show_error(f"Connection error: {e}")
                 sys.exit(1)
 
-    sync_manager = SyncManager(auth)
+    sync_manager = CLISyncManager(auth)
 
     while True:
         ui.show_main_menu()

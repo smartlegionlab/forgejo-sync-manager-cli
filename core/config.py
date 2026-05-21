@@ -8,7 +8,7 @@ class ConfigManager:
     APP_NAME = "forgejo-sync-manager"
     APP_FULL_NAME = "Forgejo Sync Manager"
     GITHUB_URL = "https://github.com/smartlegionlab/forgejo-sync-manager"
-    VERSION = "0.1.1"
+    VERSION = "0.1.2"
 
     def __init__(self):
         self.app_dir = None
@@ -30,7 +30,6 @@ class ConfigManager:
     def load(self):
         with open(self.config_path, 'r') as f:
             return json.load(f)
-        return {}
 
     def save(self, data):
         with open(self.config_path, 'w') as f:
