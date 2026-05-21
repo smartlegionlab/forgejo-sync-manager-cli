@@ -1,4 +1,4 @@
-# forgejo-sync-manager <sup>v1.0.1</sup>
+# forgejo-sync-manager <sup>v1.0.2</sup>
 
 CLI tool for batch synchronization of Forgejo repositories to local machine.
 
@@ -94,3 +94,23 @@ Configuration is stored in `~/forgejo-sync-manager/config.json`
 Copyright (©) 2026, [Alexander Suvorov](https://github.com/smartlegionlab)
 All rights reserved.
 
+## Powered By
+
+This application is built on top of:
+
+| Library                                                                                      | Description                                                   | Version |
+|----------------------------------------------------------------------------------------------|---------------------------------------------------------------|---------|
+| **[forgejo-sync-manager-core](https://github.com/smartlegionlab/forgejo-sync-manager-core)** | Universal core library for Forgejo repository synchronization | v1.0.0  |
+| **requests**                                                                                 | HTTP library for Python                                       | ≥2.31.0 |
+
+## Related Projects
+
+| Project                       | Description                             | Repository                                                            |
+|-------------------------------|-----------------------------------------|-----------------------------------------------------------------------|
+| **forgejo-sync-manager-gui**  | Desktop GUI application with dark theme | [GitHub](https://github.com/smartlegionlab/forgejo-sync-manager-gui)  |
+| **forgejo-sync-manager-core** | Universal core library                  | [GitHub](https://github.com/smartlegionlab/forgejo-sync-manager-core) |
+
+## See Also
+
+- **[forgejo-sync-manager-gui](https://github.com/smartlegionlab/forgejo-sync-manager-gui)** - If you prefer graphical interface
+- **[forgejo-sync-manager-core](https://github.com/smartlegionlab/forgejo-sync-manager-core)** - Core library for custom implementations

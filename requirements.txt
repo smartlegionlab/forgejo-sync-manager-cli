@@ -1,2 +1,2 @@
 requests==2.34.2
-forgejo-sync-manager-core==1.0.1
+forgejo-sync-manager-core==1.0.2

@@ -3,9 +3,9 @@
 import sys
 import os
 from ui.console import ConsoleUI
-from core.auth import ForgejoAuth
-from core.api_client import ForgejoAPIClient
-from core.sync_manager_cli import CLISyncManager
+from forgejo_sync_manager_core.core.auth import ForgejoAuth
+from forgejo_sync_manager_core.core.api_client import ForgejoAPIClient
+from forgejo_sync_manager_core.core.sync_manager_cli import CLISyncManager
 import requests
 
 
